@@ -61,7 +61,14 @@ class Engine
         $httpCode = curl_getinfo($curlHandler)['http_code'];
 
         if ($httpCode >= 400) {
-            throw new \Exception($this->json()['status'], $httpCode);
+            \Log::error("EBANX status code error", [
+                'extra' => [
+                    'response' => $this->json(),
+                    'http_code' => $httpCode,
+                    'curl_info' => $this->curlInfo,
+                ]
+            ]);
+//            throw new \Exception($this->json()['status'], $httpCode);
         }
 
         curl_close($curlHandler);
